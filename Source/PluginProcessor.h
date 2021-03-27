@@ -2,6 +2,8 @@
 
 #include <JuceHeader.h>
 
+//#define MAX_DELAY_TIME 2
+
 class Chorus_FlangerAudioProcessor  : public juce::AudioProcessor
 {
 public:
@@ -41,8 +43,35 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    float linear_interpolation(float sample_x, float sample_x1, float inPhase);
 
 private:
+    
+    int MAX_DELAY_TIME {2};
+    
+    float mDelayTimeSmoothed;
+    
+    AudioParameterFloat *mDryWetParameter;
+    AudioParameterFloat *mFeedbackParameter;
+    AudioParameterFloat *mDepthParameter;
+    AudioParameterFloat *mRateParameter;
+    AudioParameterFloat *mPhaseOffsetParameter;
+    
+    AudioParameterInt *mTypeParameter;
+        
+    float mFeedbackLeft;
+    float mFeedbackRight;
+    
+    float mDelayTimeInSamples;
+    float mDelayReadHead;
+    
+    int mCircularBufferLength;
+    int mCircularBufferWriteHead;
+    
+    float *mCircularBufferLeft;
+    float *mCircularBufferRight;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Chorus_FlangerAudioProcessor)
 };

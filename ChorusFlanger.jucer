@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="Tr7Dxq" name="Chorus/Flanger" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              companyName="Family Time">
+              displaySplashScreen="1" jucerFormatVersion="1" companyName="Family Time">
   <MAINGROUP id="EZRMKN" name="Chorus/Flanger">
     <GROUP id="{CE4CA82E-D009-43AA-477A-DA71756927AE}" name="Source">
       <FILE id="LKtqMS" name="PluginProcessor.cpp" compile="1" resource="0"
