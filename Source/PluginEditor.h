@@ -17,6 +17,11 @@ public:
 private:
     Slider mDryWetSlider;
     Slider mFeedbackSlider;
+    Slider mDepthSlider;
+    Slider mRateSlider;
+    Slider mPhaseOffsetSlider;
+    
+    ComboBox mTypeBox;
 
     Chorus_FlangerAudioProcessor& audioProcessor;
 

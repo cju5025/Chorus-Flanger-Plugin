@@ -5,7 +5,7 @@
 Chorus_FlangerAudioProcessorEditor::Chorus_FlangerAudioProcessorEditor (Chorus_FlangerAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    setSize (300, 175);
+    setSize (400, 300);
     
     auto& params = processor.getParameters();
     
@@ -39,6 +39,22 @@ Chorus_FlangerAudioProcessorEditor::Chorus_FlangerAudioProcessorEditor (Chorus_F
     mFeedbackSlider.onDragStart = [feedbackParameter] { feedbackParameter->beginChangeGesture(); };
     
     mFeedbackSlider.onDragEnd = [feedbackParameter] { feedbackParameter->endChangeGesture(); };
+    
+    //depth slider
+    AudioParameterFloat* depthParameter = (AudioParameterFloat*)params.getUnchecked(2);
+    
+    mDepthSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
+    mDepthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 15);
+    mDepthSlider.setRange(depthParameter->range.start, depthParameter->range.end);
+    
+    mDepthSlider.setValue(*depthParameter);
+    addAndMakeVisible(mDepthSlider);
+    
+    mDepthSlider.onValueChange = [this, depthParameter] { *depthParameter = mDepthSlider.getValue(); };
+    
+    mDepthSlider.onDragStart = [depthParameter] { depthParameter->beginChangeGesture(); };
+    
+    mDepthSlider.onDragEnd = [depthParameter] { depthParameter->endChangeGesture(); };
 }
 
 Chorus_FlangerAudioProcessorEditor::~Chorus_FlangerAudioProcessorEditor()
@@ -52,9 +68,9 @@ void Chorus_FlangerAudioProcessorEditor::paint (juce::Graphics& g)
         g.setColour (juce::Colours::white);
         g.setFont (15.0f);
         
-        g.drawText("Dry / Wet", ((getWidth() / 6.3) * 1) - (50), (getHeight() / 2) - 15, 100, 100, Justification::centred, false);
-        g.drawText("Feedback", ((getWidth() / 4) * 2) - (50), (getHeight() / 2) - 15, 100, 100, Justification::centred, false);
-        g.drawText("Time", ((getWidth() / 3.6) * 3) - (50), (getHeight() / 2) - 15, 100, 100, Justification::centred, false);
+//        g.drawText("Dry / Wet", ((getWidth() / 6.3) * 1) - (50), (getHeight() / 2) - 15, 100, 100, Justification::centred, false);
+//        g.drawText("Feedback", ((getWidth() / 4) * 2) - (50), (getHeight() / 2) - 15, 100, 100, Justification::centred, false);
+//        g.drawText("Time", ((getWidth() / 3.6) * 3) - (50), (getHeight() / 2) - 15, 100, 100, Justification::centred, false);
 
 }
 
@@ -62,4 +78,5 @@ void Chorus_FlangerAudioProcessorEditor::resized()
 {
     mDryWetSlider.setBounds(0, 0, 100, 100);
     mFeedbackSlider.setBounds(100, 0, 100, 100);
+    mDepthSlider.setBounds(0, 100, 100, 100);
 }
