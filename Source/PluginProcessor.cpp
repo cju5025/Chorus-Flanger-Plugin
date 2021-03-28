@@ -39,6 +39,8 @@ Chorus_FlangerAudioProcessor::Chorus_FlangerAudioProcessor()
      mFeedbackRight = 0;
      
      mDelayTimeSmoothed = 0;
+    
+     mLFOPhase = 0;
 }
 
 Chorus_FlangerAudioProcessor::~Chorus_FlangerAudioProcessor()
@@ -124,6 +126,8 @@ void Chorus_FlangerAudioProcessor::prepareToPlay (double sampleRate, int samples
 {
         mDelayTimeSmoothed = 1;
     
+        mLFOPhase = 0;
+    
         mCircularBufferLength = sampleRate * MAX_DELAY_TIME;
         
         if (mCircularBufferLeft == nullptr)
@@ -191,7 +195,18 @@ void Chorus_FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
         for (int i = 0; i < buffer.getNumSamples(); i++)
         {
-            mDelayTimeSmoothed = mDelayTimeSmoothed - 0.001 * (mDelayTimeSmoothed - 1);
+            float lfoOut = sin(2*M_PI * mLFOPhase);
+            
+            mLFOPhase += *mRateParameter * getSampleRate();
+            
+            if ( mLFOPhase > 1 )
+            {
+                mLFOPhase -= 1;
+            }
+            
+            float lfoOutMapped = jmap(lfoOut, -1.f, 1.f, 0.005f, 0.03f);
+            
+            mDelayTimeSmoothed = mDelayTimeSmoothed - 0.001 * (mDelayTimeSmoothed - lfoOutMapped);
             mDelayTimeInSamples = getSampleRate() * mDelayTimeSmoothed;
 
             
@@ -200,7 +215,7 @@ void Chorus_FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
             
             mDelayReadHead = mCircularBufferWriteHead - mDelayTimeInSamples;
             
-            if (mDelayReadHead < 0)
+            if ( mDelayReadHead < 0 )
             {
                 mDelayReadHead += mCircularBufferLength;
             }
@@ -209,7 +224,7 @@ void Chorus_FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
             int readHead_x1 = readHead_x + 1;
             float readHeadFloat = mDelayReadHead - readHead_x;
             
-            if (readHead_x1 >= mCircularBufferLength)
+            if ( readHead_x1 >= mCircularBufferLength )
             {
                 readHead_x1 -= mCircularBufferLength;
             }
@@ -227,7 +242,7 @@ void Chorus_FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
             buffer.setSample(1, i, buffer.getSample(1, i) * (1 - *mDryWetParameter) + delaySampleRight * *mDryWetParameter);
             
             
-            if (mCircularBufferWriteHead >= mCircularBufferLength)
+            if ( mCircularBufferWriteHead >= mCircularBufferLength )
             {
                 mCircularBufferWriteHead = 0;
             }

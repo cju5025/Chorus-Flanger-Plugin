@@ -48,6 +48,8 @@ public:
 
 private:
     
+    float mLFOPhase;
+    
     int MAX_DELAY_TIME {2};
     
     float mDelayTimeSmoothed;
