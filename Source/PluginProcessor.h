@@ -2,8 +2,6 @@
 
 #include <JuceHeader.h>
 
-//#define MAX_DELAY_TIME 2
-
 class Chorus_FlangerAudioProcessor  : public juce::AudioProcessor
 {
 public:
