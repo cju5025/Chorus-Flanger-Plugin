@@ -197,12 +197,14 @@ void Chorus_FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         {
             float lfoOut = sin(2*M_PI * mLFOPhase);
             
-            mLFOPhase += *mRateParameter * getSampleRate();
+            mLFOPhase += *mRateParameter / getSampleRate();
             
             if ( mLFOPhase > 1 )
             {
                 mLFOPhase -= 1;
             }
+            
+            lfoOut *= *mDepthParameter;
             
             float lfoOutMapped = jmap(lfoOut, -1.f, 1.f, 0.005f, 0.03f);
             
