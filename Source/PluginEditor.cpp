@@ -10,7 +10,7 @@ Chorus_FlangerAudioProcessorEditor::Chorus_FlangerAudioProcessorEditor (Chorus_F
     auto& params = processor.getParameters();
     
     //drywet slider
-    AudioParameterFloat* dryWetParameter = (AudioParameterFloat*)params.getUnchecked(0);
+    AudioParameterFloat *dryWetParameter = (AudioParameterFloat*)params.getUnchecked(0);
     
     mDryWetSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
     mDryWetSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 15);
@@ -25,7 +25,7 @@ Chorus_FlangerAudioProcessorEditor::Chorus_FlangerAudioProcessorEditor (Chorus_F
     mDryWetSlider.onDragEnd = [dryWetParameter] { dryWetParameter->endChangeGesture(); };
     
     //feedback slider
-    AudioParameterFloat* feedbackParameter = (AudioParameterFloat*)params.getUnchecked(1);
+    AudioParameterFloat *feedbackParameter = (AudioParameterFloat*)params.getUnchecked(1);
     
     mFeedbackSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
     mFeedbackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 15);
@@ -41,7 +41,7 @@ Chorus_FlangerAudioProcessorEditor::Chorus_FlangerAudioProcessorEditor (Chorus_F
     mFeedbackSlider.onDragEnd = [feedbackParameter] { feedbackParameter->endChangeGesture(); };
     
     //depth slider
-    AudioParameterFloat* depthParameter = (AudioParameterFloat*)params.getUnchecked(2);
+    AudioParameterFloat *depthParameter = (AudioParameterFloat*)params.getUnchecked(2);
     
     mDepthSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
     mDepthSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 15);
@@ -57,7 +57,7 @@ Chorus_FlangerAudioProcessorEditor::Chorus_FlangerAudioProcessorEditor (Chorus_F
     mDepthSlider.onDragEnd = [depthParameter] { depthParameter->endChangeGesture(); };
     
     //rate slider
-    AudioParameterFloat* rateParameter = (AudioParameterFloat*)params.getUnchecked(3);
+    AudioParameterFloat *rateParameter = (AudioParameterFloat*)params.getUnchecked(3);
     
     mRateSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
     mRateSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 15);
@@ -73,7 +73,7 @@ Chorus_FlangerAudioProcessorEditor::Chorus_FlangerAudioProcessorEditor (Chorus_F
     mRateSlider.onDragEnd = [rateParameter] { rateParameter->endChangeGesture(); };
     
     //phase offset slider
-    AudioParameterFloat* phaseOffsetParameter = (AudioParameterFloat*)params.getUnchecked(4);
+    AudioParameterFloat *phaseOffsetParameter = (AudioParameterFloat*)params.getUnchecked(4);
     
     mPhaseOffsetSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
     mPhaseOffsetSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 15);
@@ -88,6 +88,20 @@ Chorus_FlangerAudioProcessorEditor::Chorus_FlangerAudioProcessorEditor (Chorus_F
     
     mPhaseOffsetSlider.onDragEnd = [phaseOffsetParameter] { phaseOffsetParameter->endChangeGesture(); };
     
+    //type box
+    AudioParameterInt *typeParameter = (AudioParameterInt*)params.getUnchecked(5);
+
+    mTypeBox.addItem("Chorus", 1);
+    mTypeBox.addItem("Flanger", 2);
+    mTypeBox.setSelectedItemIndex(*typeParameter);
+    
+    addAndMakeVisible(mTypeBox);
+    
+    mTypeBox.onChange = [this, typeParameter] {
+        typeParameter->beginChangeGesture();
+        *typeParameter = mTypeBox.getSelectedItemIndex();
+        typeParameter->endChangeGesture();
+    };
 }
 
 Chorus_FlangerAudioProcessorEditor::~Chorus_FlangerAudioProcessorEditor()
@@ -114,4 +128,5 @@ void Chorus_FlangerAudioProcessorEditor::resized()
     mDepthSlider.setBounds(0, 100, 100, 100);
     mRateSlider.setBounds(200, 0, 100, 100);
     mPhaseOffsetSlider.setBounds(200, 100, 100, 100);
+    mTypeBox.setBounds(100, 125, 100, 50);
 }
