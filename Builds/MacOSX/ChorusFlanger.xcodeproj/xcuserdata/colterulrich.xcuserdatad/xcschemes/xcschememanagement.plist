@@ -7,7 +7,7 @@
 		<key>Chorus/Flanger - AU.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>1</integer>
+			<integer>0</integer>
 		</dict>
 		<key>Chorus/Flanger - All.xcscheme_^#shared#^_</key>
 		<dict>
@@ -27,11 +27,16 @@
 		<key>Chorus/Flanger - VST3.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>3</integer>
+			<integer>1</integer>
 		</dict>
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>33587C4A36A01035B67A4DC2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>65D6C97994C1612829E6A59B</key>
 		<dict>
 			<key>primary</key>

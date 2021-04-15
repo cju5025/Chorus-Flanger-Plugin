@@ -55,6 +55,39 @@ Chorus_FlangerAudioProcessorEditor::Chorus_FlangerAudioProcessorEditor (Chorus_F
     mDepthSlider.onDragStart = [depthParameter] { depthParameter->beginChangeGesture(); };
     
     mDepthSlider.onDragEnd = [depthParameter] { depthParameter->endChangeGesture(); };
+    
+    //rate slider
+    AudioParameterFloat* rateParameter = (AudioParameterFloat*)params.getUnchecked(3);
+    
+    mRateSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
+    mRateSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 15);
+    mRateSlider.setRange(rateParameter->range.start, rateParameter->range.end);
+    
+    mRateSlider.setValue(*rateParameter);
+    addAndMakeVisible(mRateSlider);
+    
+    mRateSlider.onValueChange = [this, rateParameter] { *rateParameter = mRateSlider.getValue(); };
+    
+    mRateSlider.onDragStart = [rateParameter] { rateParameter->beginChangeGesture(); };
+    
+    mRateSlider.onDragEnd = [rateParameter] { rateParameter->endChangeGesture(); };
+    
+    //phase offset slider
+    AudioParameterFloat* phaseOffsetParameter = (AudioParameterFloat*)params.getUnchecked(4);
+    
+    mPhaseOffsetSlider.setSliderStyle(Slider::SliderStyle::RotaryVerticalDrag);
+    mPhaseOffsetSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 70, 15);
+    mPhaseOffsetSlider.setRange(phaseOffsetParameter->range.start, phaseOffsetParameter->range.end);
+    
+    mPhaseOffsetSlider.setValue(*phaseOffsetParameter);
+    addAndMakeVisible(mPhaseOffsetSlider);
+    
+    mPhaseOffsetSlider.onValueChange = [this, phaseOffsetParameter] { *phaseOffsetParameter = mPhaseOffsetSlider.getValue(); };
+    
+    mPhaseOffsetSlider.onDragStart = [phaseOffsetParameter] { phaseOffsetParameter->beginChangeGesture(); };
+    
+    mPhaseOffsetSlider.onDragEnd = [phaseOffsetParameter] { phaseOffsetParameter->endChangeGesture(); };
+    
 }
 
 Chorus_FlangerAudioProcessorEditor::~Chorus_FlangerAudioProcessorEditor()
@@ -79,4 +112,6 @@ void Chorus_FlangerAudioProcessorEditor::resized()
     mDryWetSlider.setBounds(0, 0, 100, 100);
     mFeedbackSlider.setBounds(100, 0, 100, 100);
     mDepthSlider.setBounds(0, 100, 100, 100);
+    mRateSlider.setBounds(200, 0, 100, 100);
+    mPhaseOffsetSlider.setBounds(200, 100, 100, 100);
 }
