@@ -45,12 +45,7 @@ public:
     float linear_interpolation(float sample_x, float sample_x1, float inPhase);
 
 private:
-    
-    float mLFOPhase;
-    
     int MAX_DELAY_TIME {2};
-    
-    float mDelayTimeSmoothed;
     
     AudioParameterFloat *mDryWetParameter;
     AudioParameterFloat *mFeedbackParameter;
@@ -59,12 +54,11 @@ private:
     AudioParameterFloat *mPhaseOffsetParameter;
     
     AudioParameterInt *mTypeParameter;
+    
+    float mLFOPhase;
         
     float mFeedbackLeft;
     float mFeedbackRight;
-    
-    float mDelayTimeInSamples;
-    float mDelayReadHead;
     
     int mCircularBufferLength;
     int mCircularBufferWriteHead;
