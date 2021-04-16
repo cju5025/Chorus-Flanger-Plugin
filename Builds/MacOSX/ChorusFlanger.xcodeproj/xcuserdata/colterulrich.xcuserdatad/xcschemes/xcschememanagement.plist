@@ -6,11 +6,15 @@
 	<dict>
 		<key>Chorus/Flanger - AU.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>2</integer>
 		</dict>
 		<key>Chorus/Flanger - All.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
@@ -22,10 +26,12 @@
 		<key>Chorus/Flanger - Standalone Plugin.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
-			<integer>2</integer>
+			<integer>0</integer>
 		</dict>
 		<key>Chorus/Flanger - VST3.xcscheme_^#shared#^_</key>
 		<dict>
+			<key>isShown</key>
+			<false/>
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
@@ -33,6 +39,16 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>33587C4A36A01035B67A4DC2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>43251843DA05FF6FB80D3F5E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>529F441237C85DE0EACFD8FA</key>
 		<dict>
 			<key>primary</key>
 			<true/>
