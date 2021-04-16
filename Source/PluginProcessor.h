@@ -44,7 +44,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
     
-    float linear_interpolation(float sample_x, float sample_x1, float inPhase);
+    float linearInterpolation(float sample_x, float sample_x1, float inPhase);
 
 private:
     int MAX_DELAY_TIME {2};

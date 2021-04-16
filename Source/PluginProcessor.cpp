@@ -189,10 +189,12 @@ void Chorus_FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
         for (int i = 0; i < buffer.getNumSamples(); i++)
         {
+            mCircularBufferLeft[mCircularBufferWriteHead] = leftChannel[i] + mFeedbackLeft;
+            mCircularBufferRight[mCircularBufferWriteHead] = rightChannel[i] + mFeedbackRight;
+            
             float lfoOutLeft = sin(2*M_PI * mLFOPhase);
             
             float lfoPhaseRight = mLFOPhase + *mPhaseOffsetParameter;
-            
             if (lfoPhaseRight > 1)
             {
                 lfoPhaseRight -= 1;
@@ -200,9 +202,14 @@ void Chorus_FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
             
             float lfoOutRight = sin(2*M_PI * lfoPhaseRight);
             
+            mLFOPhase += *mRateParameter / getSampleRate();
+            if ( mLFOPhase > 1 )
+            {
+                mLFOPhase -= 1;
+            }
+            
             lfoOutLeft *= *mDepthParameter;
             lfoOutRight *= *mDepthParameter;
-            
 
             float lfoOutMappedLeft = jmap(lfoOutLeft, -1.f, 1.f, 0.005f, 0.03f);
             float lfoOutMappedRight = jmap(lfoOutRight, -1.f, 1.f, 0.005f, 0.03f);
@@ -216,25 +223,14 @@ void Chorus_FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
             float delayTimeSamplesLeft = getSampleRate() * lfoOutMappedLeft;
             float delayTimeSamplesRight = getSampleRate() * lfoOutMappedRight;
             
-            mLFOPhase += *mRateParameter / getSampleRate();
-            
-            if ( mLFOPhase > 1 )
-            {
-                mLFOPhase -= 1;
-            }
-            
-            mCircularBufferLeft[mCircularBufferWriteHead] = leftChannel[i] + mFeedbackLeft;
-            mCircularBufferRight[mCircularBufferWriteHead] = rightChannel[i] + mFeedbackRight;
             
             float delayReadHeadLeft = mCircularBufferWriteHead - delayTimeSamplesLeft;
-            
             if (delayReadHeadLeft < 0)
             {
                 delayReadHeadLeft += mCircularBufferLength;
             }
             
             float delayReadHeadRight = mCircularBufferWriteHead - delayTimeSamplesRight;
-            
             if (delayReadHeadRight < 0)
             {
                 delayReadHeadRight += mCircularBufferLength;
@@ -258,23 +254,23 @@ void Chorus_FlangerAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
                 readHeadRight_x1 -= mCircularBufferLength;
             }
             
-            
-            float delaySampleLeft = linear_interpolation(mCircularBufferLeft[readHeadLeft_x], mCircularBufferLeft[readHeadLeft_x1], readHeadFloatLeft);
-            float delaySampleRight = linear_interpolation(mCircularBufferRight[readHeadRight_x], mCircularBufferRight[readHeadRight_x1], readHeadFloatRight);
+            float delaySampleLeft = linearInterpolation(mCircularBufferLeft[readHeadLeft_x], mCircularBufferLeft[readHeadLeft_x1], readHeadFloatLeft);
+            float delaySampleRight = linearInterpolation(mCircularBufferRight[readHeadRight_x], mCircularBufferRight[readHeadRight_x1], readHeadFloatRight);
             
             mFeedbackLeft = delaySampleLeft * *mFeedbackParameter;
             mFeedbackRight = delaySampleRight * *mFeedbackParameter;
             
             mCircularBufferWriteHead++;
-            
-            buffer.setSample(0, i, buffer.getSample(0, i) * (1 - *mDryWetParameter) + delaySampleLeft * *mDryWetParameter);
-            buffer.setSample(1, i, buffer.getSample(1, i) * (1 - *mDryWetParameter) + delaySampleRight * *mDryWetParameter);
-            
-            
             if ( mCircularBufferWriteHead >= mCircularBufferLength )
             {
                 mCircularBufferWriteHead = 0;
             }
+            
+            float dryAmount = 1 - *mDryWetParameter;
+            float wetAmount = *mDryWetParameter;
+            
+            buffer.setSample(0, i, buffer.getSample(0, i) * dryAmount + delaySampleLeft * wetAmount);
+            buffer.setSample(1, i, buffer.getSample(1, i) * dryAmount + delaySampleRight * wetAmount);
         }
 }
 
@@ -326,7 +322,7 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new Chorus_FlangerAudioProcessor();
 }
 
-float Chorus_FlangerAudioProcessor::linear_interpolation(float sample_x, float sample_x1, float inPhase)
+float Chorus_FlangerAudioProcessor::linearInterpolation(float sample_x, float sample_x1, float inPhase)
 {
     return (1 - inPhase) * sample_x + inPhase * sample_x1;
 }
